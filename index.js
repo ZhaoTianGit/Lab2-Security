@@ -21,10 +21,10 @@ async function run() {
             await listDatabases(client);
 
             // Create a Data
-            // await createCollection(client, {
-            //     username: "zt2",
-            //     password: "321abc"
-            // });
+            await createCollection(client, {
+                username: "zt3",
+                password: await encryptPassword("321abc")
+            });
 
             // read a data
             //await findOneData(client, "zt2");
@@ -33,7 +33,7 @@ async function run() {
             //await updateData(client, "zt", { password: "654asd" });
 
             // delete a data
-            await deleteData(client, "zt");
+            //await deleteData(client, "zt");
 
         } 
             catch (e) {
@@ -80,3 +80,15 @@ async function deleteData(client, nameOfData){
     result = await client.db("BENR2423").collection("Users").deleteOne({ username: nameOfData });
     console.log(`${result.deletedCount} data was deleted.`);
 }
+
+const password = "321abc"
+async function encryptPassword(password) {
+    // Generate a salt
+    const salt = await bcrypt.genSalt(10);
+  
+    // Hash the password with the salt
+    const hash = await bcrypt.hash(password, salt);
+  
+    // Return the hash and salt
+    return hash
+  }
