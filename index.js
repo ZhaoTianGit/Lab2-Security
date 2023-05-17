@@ -20,12 +20,20 @@ async function run() {
             // Make the appropriate DB calls
             await listDatabases(client);
 
-            // Create a document
-            await createListing(client, {
-                username: "zt",
-                password: "321abc"
-            });
+            // Create a Data
+            // await createCollection(client, {
+            //     username: "zt2",
+            //     password: "321abc"
+            // });
 
+            // read a data
+            //await findOneData(client, "zt2");
+
+            // Update a data with possword
+            //await updateData(client, "zt", { password: "654asd" });
+
+            // delete a data
+            await deleteData(client, "zt");
 
         } 
             catch (e) {
@@ -44,7 +52,31 @@ async function listDatabases(client){
 }
 
 // Create a collection
-async function createListing(client, newListing){
-    const result = await client.db("BENR2423").collection("Users").insertOne(newListing);
+async function createCollection(client, newData){
+    const result = await client.db("BENR2423").collection("Users").insertOne(newData);
     console.log(`New data with id: ${result.insertedId} is created!`);     // Show that a new data created
+}
+
+// read a data
+async function findOneData(client, nameOfData){
+    result = await client.db("BENR2423").collection("Users").findOne({ username: nameOfData });
+    if (result) {
+        console.log(`Found the username '${nameOfData}':`);
+        console.log(result);
+    } else {
+        console.log(`No data found with the username '${nameOfData}'`);
+    }
+}
+
+// update a data
+async function updateData(client, nameOfData, updatedData){
+    result = await client.db("BENR2423").collection("Users").updateOne({ username: nameOfData }, { $set: updatedData });
+    console.log(`${result.matchedCount} data matched the query criteria.`);
+    console.log(`${result.modifiedCount} data was updated.`);
+}
+
+// delete a document
+async function deleteData(client, nameOfData){
+    result = await client.db("BENR2423").collection("Users").deleteOne({ username: nameOfData });
+    console.log(`${result.deletedCount} data was deleted.`);
 }
